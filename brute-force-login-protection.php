@@ -8,7 +8,7 @@ require_once ABSPATH . '/wp-admin/includes/file.php';
  * Description: Protects your website against brute force login attacks using .htaccess
  * Text Domain: brute-force-login-protection
  * Author: Jan-Paul Kleemans
- * Version: 1.0
+ * Version: 1.1
  * License: GPL2
  * 
  * Copyright 2014  Jan-Paul Kleemans
