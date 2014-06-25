@@ -1,0 +1,120 @@
+# Copyright (C) 2014 Brute Force Login Protection
+# This file is distributed under the same license as the Brute Force Login Protection package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Brute Force Login Protection 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/brute-force-login-protection\n"
+"POT-Creation-Date: 2014-06-25 11:54:54+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-06-25 14:07+0100\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+#: brute-force-login-protection.php:86 settings-page.php:14
+msgid "Brute Force Login Protection Settings"
+msgstr "Brute Force Login Protection Instellingen"
+
+#: brute-force-login-protection.php:132
+msgid "Brute Force Login Protection error: .htaccess file not found"
+msgstr "Brute Force Login Protection fout: .htaccess bestand niet gevonden"
+
+#: brute-force-login-protection.php:134
+msgid "Brute Force Login Protection error: .htaccess file not readable"
+msgstr "Brute Force Login Protection fout: .htaccess bestand niet leesbaar"
+
+#: brute-force-login-protection.php:136
+msgid "Brute Force Login Protection error: .htaccess file not writeable"
+msgstr "Brute Force Login Protection fout: .htaccess bestand niet schrijfbaar"
+
+#: brute-force-login-protection.php:151
+msgid "IP %s blocked"
+msgstr "IP %s geblokkeerd"
+
+#: brute-force-login-protection.php:153
+msgid "An error occurred while blocking IP %s"
+msgstr "Er is een fout opgetreden bij het blokkeren van IP %s"
+
+#: brute-force-login-protection.php:157
+msgid "IP %s unblocked"
+msgstr "IP %s gedeblokkeerd"
+
+#: brute-force-login-protection.php:159
+msgid "An error occurred while unblocking IP %s"
+msgstr "Er is een fout opgetreden bij het deblokkeren van IP %s"
+
+#: brute-force-login-protection.php:232
+msgid "Allowed login attempts must be a number (between 1 and 100)"
+msgstr "Toegestane inlogpogingen moet een getal zijn (tussen 1 en 100)"
+
+#: brute-force-login-protection.php:247
+msgid "Minutes before resetting must be a number (higher than 1)"
+msgstr ""
+"Minuten voordat loginpogingen teller wordt gereset moet een getal zijn "
+"(groter dan 1)"
+
+#: settings-page.php:18
+msgid "Options"
+msgstr "Opties"
+
+#: settings-page.php:22
+msgid "Allowed login attempts before blocking IP"
+msgstr "Toegestane inlogpogingen voordat IP wordt geblokkeerd"
+
+#: settings-page.php:25
+msgid "Minutes before resetting login attempts count"
+msgstr "Minuten voordat loginpogingen teller wordt gereset"
+
+#: settings-page.php:28
+msgid ".htaccess file location"
+msgstr ".htaccess bestandslocatie"
+
+#: settings-page.php:32
+msgid "Save"
+msgstr "Opslaan"
+
+#: settings-page.php:38
+msgid "Manually block IP"
+msgstr "Handmatig IP blokkeren"
+
+#: settings-page.php:41
+msgid "IP address"
+msgstr "IP adres"
+
+#: settings-page.php:45
+msgid "Block"
+msgstr "Blokkeren"
+
+#: settings-page.php:51
+msgid "Blocked IPs"
+msgstr "Geblokkeerde IPs"
+
+#: settings-page.php:56
+msgid "Address"
+msgstr "Adres"
+
+#: settings-page.php:57
+msgid "Actions"
+msgstr "Acties"
+
+#: settings-page.php:71
+msgid "Unblock"
+msgstr "Deblokkeren"
+
+#. Plugin Name of the plugin/theme
+msgid "Brute Force Login Protection"
+msgstr "Brute Force Login Protection"
+
+#. Description of the plugin/theme
+msgid "Protects your website against brute force login attacks using .htaccess"
+msgstr ""
+"Beschermt uw website tegen brute force login aanvallen doormiddel van ."
+"htaccess"
+
+#. Author of the plugin/theme
+msgid "Jan-Paul Kleemans"
+msgstr "Jan-Paul Kleemans"
