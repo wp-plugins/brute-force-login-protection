@@ -5,10 +5,12 @@ require_once ABSPATH . '/wp-admin/includes/file.php';
 
 /**
  * Plugin Name: Brute Force Login Protection
+ * Plugin URI: http://wordpress.org/plugins/brute-force-login-protection/
  * Description: Protects your website against brute force login attacks using .htaccess
  * Text Domain: brute-force-login-protection
  * Author: Jan-Paul Kleemans
- * Version: 1.1
+ * Author URI: http://profiles.wordpress.org/jan-paul-kleemans/
+ * Version: 1.2
  * License: GPL2
  * 
  * Copyright 2014  Jan-Paul Kleemans
@@ -32,11 +34,7 @@ class BruteForceLoginProtection {
 
     public function __construct() {
         //Default options
-        $this->__options = array(
-            'allowed_attempts' => 20, //Allowed login attempts before deny,
-            'reset_time' => 60, //Minutes before resetting login attempts count
-            'htaccess_dir' => get_home_path() //.htaccess file location
-        );
+        $this->__setDefaultOptions();
 
         //Activation and deactivation hooks
         register_activation_hook(__FILE__, array($this, 'activate'));
@@ -65,7 +63,7 @@ class BruteForceLoginProtection {
         $this->__fillOptions();
 
         //Call checkRequirements to check for .htaccess errors
-        add_action('admin_notices', array($this, 'checkRequirements'));
+        add_action('admin_notices', array($this, 'showRequirementsErrors'));
     }
 
     /**
@@ -123,16 +121,18 @@ class BruteForceLoginProtection {
     }
 
     /**
-     * Checks if .htaccess file is found, readable and writeable.
+     * Checks requirements and shows errors
      * 
      * @return void
      */
-    public function checkRequirements() {
-        if (!file_exists($this->__options['htaccess_dir'] . '/.htaccess')) { //Not found
+    public function showRequirementsErrors() {
+        $status = $this->__checkRequirements();
+
+        if (!$status['found']) {
             $this->__showError(__('Brute Force Login Protection error: .htaccess file not found', 'brute-force-login-protection'));
-        } elseif (!is_readable($this->__options['htaccess_dir'] . '/.htaccess')) { //Not readable
+        } elseif (!$status['readable']) {
             $this->__showError(__('Brute Force Login Protection error: .htaccess file not readable', 'brute-force-login-protection'));
-        } elseif (!is_writeable($this->__options['htaccess_dir'] . '/.htaccess')) { //Not writeable
+        } elseif (!$status['writeable']) {
             $this->__showError(__('Brute Force Login Protection error: .htaccess file not writeable', 'brute-force-login-protection'));
         }
     }
@@ -159,6 +159,10 @@ class BruteForceLoginProtection {
                     $this->__showError(sprintf(__('An error occurred while unblocking IP %s', 'brute-force-login-protection'), $IP));
                 }
             }
+        } elseif (isset($_POST['reset'])) {
+            $this->__deleteOptions();
+            $this->__setDefaultOptions();
+            $this->__showMessage(sprintf(__('The Options have been successfully reset', 'brute-force-login-protection'), $IP));
         }
 
         include 'settings-page.php';
@@ -193,6 +197,13 @@ class BruteForceLoginProtection {
         }
 
         update_option('bflp_login_attempts', $attempts);
+
+        if ($this->__options['inform_user']) {
+            global $error;
+            $remainingAttempts = $this->__options['allowed_attempts'] - $attempts[$IP]['attempts'];
+            $error .= '<br />';
+            $error .= sprintf(_n("%d attempt remaining.", "%d attempts remaining.", $remainingAttempts, 'brute-force-login-protection'), $remainingAttempts);
+        }
 
         if ($denyIP) {
             $this->__denyIP($IP);
@@ -254,6 +265,33 @@ class BruteForceLoginProtection {
      */
 
     /**
+     * Checks if .htaccess file is found, readable and writeable.
+     * 
+     * @return array
+     */
+    public function __checkRequirements() {
+        $status = array(
+            'found' => false,
+            'readable' => false,
+            'writeable' => false
+        );
+
+        $htaccessPath = $this->__options['htaccess_dir'] . '/.htaccess';
+
+        if (file_exists($htaccessPath)) { //File found
+            $status['found'] = true;
+        }
+        if (is_readable($htaccessPath)) { //File readable
+            $status['readable'] = true;
+        }
+        if (is_writeable($htaccessPath)) { //File writeable
+            $status['writeable'] = true;
+        }
+
+        return $status;
+    }
+
+    /**
      * Registers options (settings).
      * 
      * @return void
@@ -261,6 +299,7 @@ class BruteForceLoginProtection {
     private function __registerOptions() {
         register_setting('brute-force-login-protection', 'bflp_allowed_attempts', array($this, 'validateAllowedAttempts'));
         register_setting('brute-force-login-protection', 'bflp_reset_time', array($this, 'validateResetTime'));
+        register_setting('brute-force-login-protection', 'bflp_inform_user');
         register_setting('brute-force-login-protection', 'bflp_htaccess_dir');
     }
 
@@ -272,7 +311,34 @@ class BruteForceLoginProtection {
     private function __fillOptions() {
         $this->__options['allowed_attempts'] = get_option('bflp_allowed_attempts', $this->__options['allowed_attempts']);
         $this->__options['reset_time'] = get_option('bflp_reset_time', $this->__options['reset_time']);
+        $this->__options['inform_user'] = get_option('bflp_inform_user', $this->__options['inform_user']);
         $this->__options['htaccess_dir'] = get_option('bflp_htaccess_dir', $this->__options['htaccess_dir']);
+    }
+
+    /**
+     * Fills options with default value.
+     * 
+     * @return void
+     */
+    private function __setDefaultOptions() {
+        $this->__options = array(
+            'allowed_attempts' => 20, //Allowed login attempts before deny,
+            'reset_time' => 60, //Minutes before resetting login attempts count
+            'inform_user' => true, //Inform user about remaining login attempts on login page
+            'htaccess_dir' => get_home_path() //.htaccess file location
+        );
+    }
+
+    /**
+     * Deletes options from database
+     * 
+     * @return void
+     */
+    private function __deleteOptions() {
+        delete_option('bflp_allowed_attempts');
+        delete_option('bflp_reset_time');
+        delete_option('bflp_inform_user');
+        delete_option('bflp_htaccess_dir');
     }
 
     /**
