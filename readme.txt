@@ -15,7 +15,8 @@ After a specified limit of login attempts within a specified time, the IP addres
 
 Features
 
-* Limit the number of allowed login attempts
+* Limit the number of allowed login attempts using normal login form
+* Limit the number of allowed login attempts using Auth Cookies
 * Manually block IP addresses
 * Manually unblock IP addresses
 * Option to inform user about remaining attempts on login page
@@ -40,6 +41,9 @@ Brute Force Login Protection will only work if your .htaccess file is writeable 
 1. Plugin settings page
 
 == Changelog ==
+= 1.3 =
+* Protection against brute force attacks using Auth Cookies
+
 = 1.2 =
 * Option to inform user about remaining attempts on login page
 * Ability to reset options

@@ -10,7 +10,7 @@ require_once ABSPATH . '/wp-admin/includes/file.php';
  * Text Domain: brute-force-login-protection
  * Author: Jan-Paul Kleemans
  * Author URI: http://profiles.wordpress.org/jan-paul-kleemans/
- * Version: 1.2
+ * Version: 1.3
  * License: GPL2
  * 
  * Copyright 2014  Jan-Paul Kleemans
@@ -48,6 +48,10 @@ class BruteForceLoginProtection {
         //Login hooks
         add_action('wp_login_failed', array($this, 'loginFailed'));
         add_action('wp_login', array($this, 'loginSucceeded'));
+
+        //Auth cookie hooks
+        add_action('auth_cookie_bad_username', array($this, 'loginFailed'));
+        add_action('auth_cookie_bad_hash', array($this, 'loginFailed'));
     }
 
     /**
@@ -72,6 +76,7 @@ class BruteForceLoginProtection {
      * @return void
      */
     public function adminInit() {
+        //Register plugin settings
         $this->__registerOptions();
     }
 
@@ -81,10 +86,12 @@ class BruteForceLoginProtection {
      * @return void
      */
     public function menuInit() {
+        //Add settings page to the Settings menu
         add_options_page(__('Brute Force Login Protection Settings', 'brute-force-login-protection'), 'Brute Force Login Protection', 'manage_options', 'brute-force-login-protection', array($this, 'showSettingsPage'));
     }
 
     /**
+     * Called When the plugin is activated
      * Adds base lines to .htaccess and resets commented denies.
      * 
      * @return boolean
@@ -106,6 +113,7 @@ class BruteForceLoginProtection {
     }
 
     /**
+     * Called When the plugin is deactivated
      * Comments out all denies in .htaccess.
      * 
      * @return boolean
@@ -169,6 +177,7 @@ class BruteForceLoginProtection {
     }
 
     /**
+     * Called when a user login has failed
      * Increase number of attempts for clients IP. Deny IP if max attempts is reached.
      * 
      * @return void
@@ -211,6 +220,7 @@ class BruteForceLoginProtection {
     }
 
     /**
+     * Called when a user has successfully logged in
      * Removes IP from bflp_login_attempts if exist.
      * 
      * @return void
