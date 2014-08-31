@@ -1,11 +1,11 @@
 <style type="text/css">
-    .brute-force-login-protection .status-yes{
+    .brute-force-login-protection .status-yes {
         color:#27ae60;
     }
-    .brute-force-login-protection .status-no{
+    .brute-force-login-protection .status-no {
         color:#cd3d2e;
     }
-    .brute-force-login-protection .postbox-footer{
+    .brute-force-login-protection .postbox-footer {
         padding:10px;
         clear:both;
         border-top:1px solid #ddd;
@@ -13,6 +13,9 @@
     }
     .brute-force-login-protection input[type="number"] {
         width:60px;
+    }
+    .brute-force-login-protection tr.even {
+        background-color:#f5f5f5;
     }
 </style>
 
@@ -29,7 +32,7 @@
 
     <div class="metabox-holder">
         <div class="postbox">
-            <?php $status = $this->__checkRequirements(); ?>
+            <?php $status = $this->__htaccess->checkRequirements(); ?>
             <h3>
                 <?php _e('Status', 'brute-force-login-protection'); ?>
                 <?php if (in_array(false, $status)): ?>
@@ -65,33 +68,26 @@
                 <?php settings_fields('brute-force-login-protection'); ?>
                 <div class="inside">
                     <p><strong><?php _e('Allowed login attempts before blocking IP', 'brute-force-login-protection'); ?></strong></p>
-                    <p><input type="number" min="1" name="bflp_allowed_attempts" value="<?php echo $this->__options['allowed_attempts']; ?>" /></p>
+                    <p><input type="number" min="1" max="100" name="bflp_allowed_attempts" value="<?php echo $this->__options['allowed_attempts']; ?>" /></p>
 
                     <p><strong><?php _e('Minutes before resetting login attempts count', 'brute-force-login-protection'); ?></strong></p>
                     <p><input type="number" min="1" name="bflp_reset_time" value="<?php echo $this->__options['reset_time']; ?>" /></p>
 
+                    <p><strong><?php _e('Delay in seconds when a user login has failed (to slow down brute force attack)', 'brute-force-login-protection'); ?></strong></p>
+                    <p><input type="number" min="1" max="10" name="bflp_login_failed_delay" value="<?php echo $this->__options['login_failed_delay']; ?>" /></p>
+
                     <p><strong><?php _e('Inform user about remaining login attempts on login page', 'brute-force-login-protection'); ?></strong></p>
                     <p><input type="checkbox" name="bflp_inform_user" value="true" <?php echo ($this->__options['inform_user']) ? 'checked' : ''; ?> /></p>
 
+                    <p><strong><?php _e('Message to show to a blocked user (leave empty for default message)', 'brute-force-login-protection'); ?></strong></p>
+                    <p><input type="text" size="70" name="bflp_403_message" value="<?php echo $this->__options['403_message']; ?>" /></p>
+
                     <p><strong><?php _e('.htaccess file location', 'brute-force-login-protection'); ?></strong></p>
-                    <p><input type="text" size="50" name="bflp_htaccess_dir" value="<?php echo $this->__options['htaccess_dir']; ?>" /></p>
+                    <p><input type="text" size="70" name="bflp_htaccess_dir" value="<?php echo $this->__options['htaccess_dir']; ?>" /></p>
                 </div>
                 <div class="postbox-footer">
                     <?php submit_button(__('Save', 'brute-force-login-protection'), 'primary', 'submit', false); ?>&nbsp;
                     <a href="javascript:ResetOptions()" class="button"><?php _e('Reset', 'brute-force-login-protection'); ?></a>
-                </div>
-            </form>
-        </div>
-
-        <div class="postbox">
-            <h3><?php _e('Manually block IP', 'brute-force-login-protection'); ?></h3>
-            <form method="post" action="">
-                <div class="inside">
-                    <p><strong><?php _e('IP address', 'brute-force-login-protection'); ?></strong></p>
-                    <p><input type="text" name="IP" /></p>
-                </div>
-                <div class="postbox-footer">
-                    <input type="submit" name="block" value="<?php echo __('Block', 'brute-force-login-protection'); ?>" class="button button-primary" />
                 </div>
             </form>
         </div>
@@ -102,16 +98,16 @@
         <thead>
             <tr>
                 <th width="5%">#</th>
-                <th width="35%"><?php _e('Address', 'brute-force-login-protection'); ?></th>
-                <th width="60%"><?php _e('Actions', 'brute-force-login-protection'); ?></th>
+                <th width="30%"><?php _e('Address', 'brute-force-login-protection'); ?></th>
+                <th width="65%"><?php _e('Actions', 'brute-force-login-protection'); ?></th>
             </tr>
         </thead>
         <tbody>
             <?php
             $i = 1;
-            foreach ($this->__getDeniedIPs() as $deniedIP):
+            foreach ($this->__htaccess->getDeniedIPs() as $deniedIP):
                 ?>
-                <tr>
+                <tr <?php echo ($i % 2 == 0) ? 'class="even"' : ''; ?>>
                     <td><?php echo $i; ?></td>
                     <td><strong><?php echo $deniedIP ?></strong></td>
                     <td>
@@ -125,6 +121,59 @@
                 $i++;
             endforeach;
             ?>
+            <tr <?php echo ($i % 2 == 0) ? 'class="even"' : ''; ?>>
+                <td><?php echo $i; ?></td>
+        <form method="post" action="">
+            <td>
+                <input type="text" name="IP" placeholder="<?php _e('IP to block', 'brute-force-login-protection'); ?>" required />
+            </td>
+            <td>
+                <input type="submit" name="block" value="<?php _e('Manually block IP', 'brute-force-login-protection'); ?>" class="button button-primary" />
+            </td>
+        </form>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3><?php _e('Whitelisted IPs', 'brute-force-login-protection'); ?></h3>
+    <table class="wp-list-table widefat fixed">
+        <thead>
+            <tr>
+                <th width="5%">#</th>
+                <th width="30%"><?php _e('Address', 'brute-force-login-protection'); ?></th>
+                <th width="65%"><?php _e('Actions', 'brute-force-login-protection'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $i = 1;
+            foreach ($this->__getWhitelist() as $whitelistedIP):
+                ?>
+                <tr <?php echo ($i % 2 == 0) ? 'class="even"' : ''; ?>>
+                    <td><?php echo $i; ?></td>
+                    <td><strong><?php echo $whitelistedIP ?></strong></td>
+                    <td>
+                        <form method="post" action="">
+                            <input type="hidden" name="IP" value="<?php echo $whitelistedIP ?>" />
+                            <input type="submit" name="unwhitelist" value="<?php echo __('Remove from whitelist', 'brute-force-login-protection'); ?>" class="button" />
+                        </form>
+                    </td>
+                </tr>
+                <?php
+                $i++;
+            endforeach;
+            ?>
+            <tr <?php echo ($i % 2 == 0) ? 'class="even"' : ''; ?>>
+                <td><?php echo $i; ?></td>
+        <form method="post" action="">
+            <td>
+                <input type="text" name="IP" placeholder="<?php _e('IP to whitelist', 'brute-force-login-protection'); ?>" required />
+            </td>
+            <td>
+                <input type="submit" name="whitelist" value="<?php _e('Add to whitelist', 'brute-force-login-protection'); ?>" class="button button-primary" />
+            </td>
+        </form>
+        </tr>
         </tbody>
     </table>
 
