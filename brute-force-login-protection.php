@@ -318,7 +318,7 @@ class BruteForceLoginProtection {
         if ($this->__htaccess->edit403Message($message)) {
             return $message;
         } else {
-            add_settings_error('bflp_403_message', 'bflp_403_message', __('An error occurred while saving the blocked user message', 'brute-force-login-protection'));
+            add_settings_error('bflp_403_message', 'bflp_403_message', __('An error occurred while saving the blocked users message', 'brute-force-login-protection'));
             $this->__fillOption('403_message');
             return $this->__options['403_message'];
         }
