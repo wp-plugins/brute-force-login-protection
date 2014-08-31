@@ -2,7 +2,7 @@
 Contributors: Jan-Paul Kleemans
 Tags: brute force, bruteforce, login, wp-login, protection, shield, security, htaccess, block, ip
 Requires at least: 2.7.0
-Tested up to: 3.9.1
+Tested up to: 3.9.2
 Stable tag: 1.3
 License: GPL2
 
@@ -17,9 +17,11 @@ Features
 
 * Limit the number of allowed login attempts using normal login form
 * Limit the number of allowed login attempts using Auth Cookies
-* Manually block IP addresses
-* Manually unblock IP addresses
+* Manually block/unblock IP addresses
+* Manually whitelist trusted IP addresses
+* Delay execution after a failed login attempt (to slow down brute force attack)
 * Option to inform user about remaining attempts on login page
+* Custom message to show to blocked users
 
 Your feedback is highly appreciated!
 
@@ -41,6 +43,12 @@ Brute Force Login Protection will only work if your .htaccess file is writeable 
 1. Plugin settings page
 
 == Changelog ==
+= 1.4 =
+* Ability to whitelist trusted IPs
+* Ability to create custom message to show to blocked users
+* Delay execution after a failed login attempt (to slow down brute force attack)
+* Performance improvements
+
 = 1.3 =
 * Protection against brute force attacks using Auth Cookies
 
