@@ -25,6 +25,10 @@
             document.forms["reset_form"].submit();
         }
     }
+
+    function WhitelistCurrentIP() {
+        document.forms["whitelist_current_ip_form"].submit();
+    }
 </script>
 
 <div class="wrap brute-force-login-protection">
@@ -78,6 +82,9 @@
 
                     <p><strong><?php _e('Inform user about remaining login attempts on login page', 'brute-force-login-protection'); ?></strong></p>
                     <p><input type="checkbox" name="bflp_inform_user" value="true" <?php echo ($this->__options['inform_user']) ? 'checked' : ''; ?> /></p>
+
+                    <p><strong><?php _e('Send email to administrator when an IP has been blocked', 'brute-force-login-protection'); ?></strong></p>
+                    <p><input type="checkbox" name="bflp_send_email" value="true" <?php echo ($this->__options['send_email']) ? 'checked' : ''; ?> /></p>
 
                     <p><strong><?php _e('Message to show to blocked users (leave empty for default message)', 'brute-force-login-protection'); ?></strong></p>
                     <p><input type="text" size="70" name="bflp_403_message" value="<?php echo $this->__options['403_message']; ?>" /></p>
@@ -146,8 +153,11 @@
         </thead>
         <tbody>
             <?php
+            $currentIP = $this->__getClientIP();
+
             $i = 1;
-            foreach ($this->__getWhitelist() as $whitelistedIP):
+            $whitelist = $this->__getWhitelist();
+            foreach ($whitelist as $whitelistedIP):
                 ?>
                 <tr <?php echo ($i % 2 == 0) ? 'class="even"' : ''; ?>>
                     <td><?php echo $i; ?></td>
@@ -171,6 +181,9 @@
             </td>
             <td>
                 <input type="submit" name="whitelist" value="<?php _e('Add to whitelist', 'brute-force-login-protection'); ?>" class="button button-primary" />
+                <?php if (!in_array($currentIP, $whitelist)): ?>
+                    &nbsp;<a href="javascript:WhitelistCurrentIP()" class="button"><?php printf(__('Whitelist my current IP (%s)', 'brute-force-login-protection'), $currentIP); ?></a>
+                <?php endif; ?>
             </td>
         </form>
         </tr>
@@ -179,5 +192,10 @@
 
     <form id="reset_form" method="post" action="">
         <input type="hidden" name="reset" value="true" />
+    </form>
+
+    <form id="whitelist_current_ip_form" method="post" action="">
+        <input type="hidden" name="whitelist" value="true" />
+        <input type="hidden" name="IP" value="<?php echo $currentIP; ?>" />
     </form>
 </div>

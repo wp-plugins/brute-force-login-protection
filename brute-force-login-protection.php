@@ -10,7 +10,7 @@ require_once 'includes/htaccess.php';
  * Text Domain: brute-force-login-protection
  * Author: Fresh-Media
  * Author URI: http://fresh-media.nl/
- * Version: 1.4
+ * Version: 1.4.1
  * License: GPL2
  * 
  * Copyright 2014  Fresh-Media
@@ -222,6 +222,9 @@ class BruteForceLoginProtection {
             update_option('bflp_login_attempts', $attempts);
 
             if ($denyIP) {
+                if ($this->__options['send_email']) {
+                    $this->__sendEmail($IP);
+                }
                 $this->__setHtaccessPath();
                 $this->__htaccess->denyIP($IP);
                 header('HTTP/1.0 403 Forbidden');
@@ -349,6 +352,7 @@ class BruteForceLoginProtection {
             'reset_time' => 60, //Minutes before resetting login attempts count
             'login_failed_delay' => 1, //Delay in seconds when a user login has failed
             'inform_user' => true, //Inform user about remaining login attempts on login page
+            'send_email' => false, //Send email to administrator when an IP has been blocked
             '403_message' => '', //Message to show to a blocked user
             'htaccess_dir' => get_home_path() //.htaccess file location
         );
@@ -364,6 +368,7 @@ class BruteForceLoginProtection {
         register_setting('brute-force-login-protection', 'bflp_reset_time', array($this, 'validateResetTime'));
         register_setting('brute-force-login-protection', 'bflp_login_failed_delay', array($this, 'validateLoginFailedDelay'));
         register_setting('brute-force-login-protection', 'bflp_inform_user');
+        register_setting('brute-force-login-protection', 'bflp_send_email');
         register_setting('brute-force-login-protection', 'bflp_403_message', array($this, 'validate403Message'));
         register_setting('brute-force-login-protection', 'bflp_htaccess_dir');
     }
@@ -378,6 +383,7 @@ class BruteForceLoginProtection {
         delete_option('bflp_reset_time');
         delete_option('bflp_login_failed_delay');
         delete_option('bflp_inform_user');
+        delete_option('bflp_send_email');
         delete_option('bflp_403_message');
         delete_option('bflp_htaccess_dir');
     }
@@ -392,6 +398,7 @@ class BruteForceLoginProtection {
         $this->__options['reset_time'] = get_option('bflp_reset_time', $this->__options['reset_time']);
         $this->__options['login_failed_delay'] = get_option('bflp_login_failed_delay', $this->__options['login_failed_delay']);
         $this->__options['inform_user'] = get_option('bflp_inform_user', $this->__options['inform_user']);
+        $this->__options['send_email'] = get_option('bflp_send_email', $this->__options['send_email']);
         $this->__options['403_message'] = get_option('bflp_403_message', $this->__options['403_message']);
     }
 
@@ -478,6 +485,19 @@ class BruteForceLoginProtection {
      */
     private function __getClientIP() {
         return $_SERVER['REMOTE_ADDR'];
+    }
+
+    /**
+     * Sends email to admin with info about blocked IP
+     * 
+     * @return mixed
+     */
+    private function __sendEmail($IP) {
+        $to = get_option('admin_email');
+        $subject = sprintf(__('IP %s has been blocked', 'brute-force-login-protection'), $IP);
+        $message = sprintf(__('Brute Force Login Protection has blocked IP %s from access to %s on %s', 'brute-force-login-protection'), $IP, get_site_url(), date('Y-m-d H:i:s'));
+
+        return wp_mail($to, $subject, $message);
     }
 
     /**

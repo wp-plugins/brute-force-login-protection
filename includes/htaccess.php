@@ -7,7 +7,7 @@ class Htaccess {
     private $__path;
     private $__header = array(
         '<Files "*">',
-        'Order deny,allow'
+        'order deny,allow'
     );
     private $__footer = array(
         '</Files>'
@@ -53,7 +53,13 @@ class Htaccess {
      * @return array
      */
     public function getDeniedIPs() {
-        return $this->__getLines('deny from ');
+        $lines = $this->__getLines('deny from ');
+
+        foreach ($lines as $key => $line) {
+            $lines[$key] = substr($line, 10);
+        }
+
+        return $lines;
     }
 
     /**
@@ -119,7 +125,7 @@ class Htaccess {
      * @return boolean
      */
     public function commentLines() {
-        $currentLines = $this->__getLines();
+        $currentLines = $this->__getLines(array('deny from ', 'ErrorDocument 403 '));
 
         $insertion = array();
         foreach ($currentLines as $line) {
@@ -135,13 +141,11 @@ class Htaccess {
      * @return boolean
      */
     public function uncommentLines() {
-        $currentLines = $this->__getLines(false, false);
+        $currentLines = $this->__getLines(array('#deny from ', '#ErrorDocument 403 '));
 
         $lines = array();
         foreach ($currentLines as $line) {
-            if (substr($line, 0, 1) === '#') {
-                $lines[] = substr($line, 1);
-            }
+            $lines[] = substr($line, 1);
         }
 
         $insertion = array_merge($this->__header, $lines, $this->__footer);
@@ -156,31 +160,35 @@ class Htaccess {
     /**
      * Returs array of (prefixed) lines from .htaccess.
      * 
-     * @param string $prefix
+     * @param string $prefixes
      * @return array
      */
-    private function __getLines($prefix = false, $onlyBody = true, $exceptPrefix = false) {
+    private function __getLines($prefixes = false, $onlyBody = false, $exceptPrefix = false) {
         $allLines = extract_from_markers($this->__path, 'Brute Force Login Protection');
 
         if ($onlyBody) {
             $allLines = array_diff($allLines, $this->__header, $this->__footer);
         }
 
-        if (!$prefix) {
+        if (!$prefixes) {
             return $allLines;
         }
 
-        $prefixLength = strlen($prefix);
+        if (!is_array($prefixes)) {
+            $prefixes = array($prefixes);
+        }
 
         $prefixedLines = array();
         foreach ($allLines as $line) {
-            if ($exceptPrefix) {
-                if (substr($line, 0, $prefixLength) !== $prefix) {
+            foreach ($prefixes as $prefix) {
+                if (strpos($line, $prefix) === 0) {
                     $prefixedLines[] = $line;
                 }
-            } elseif (substr($line, 0, $prefixLength) === $prefix) {
-                $prefixedLines[] = substr($line, $prefixLength);
             }
+        }
+
+        if ($exceptPrefix) {
+            $prefixedLines = array_diff($allLines, $prefixedLines);
         }
 
         return $prefixedLines;
@@ -193,7 +201,7 @@ class Htaccess {
      * @return boolean
      */
     private function __addLine($line) {
-        $insertion = array_merge($this->__header, $this->__getLines(), array($line), $this->__footer);
+        $insertion = array_merge($this->__header, $this->__getLines(false, true), array($line), $this->__footer);
 
         return insert_with_markers($this->__path, 'Brute Force Login Protection', array_unique($insertion));
     }
@@ -206,7 +214,7 @@ class Htaccess {
      * @return boolean
      */
     private function __removeLine($line, $prefix = false) {
-        $insertion = $this->__getLines(false, false);
+        $insertion = $this->__getLines();
 
         if ($prefix !== false) {
             $lineKey = false;
