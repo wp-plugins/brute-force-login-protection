@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Brute Force Login Protection 1.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/brute-force-login-protection\n"
-"POT-Creation-Date: 2014-08-31 15:37:15+00:00\n"
-"PO-Revision-Date: 2014-08-31 17:40+0100\n"
+"POT-Creation-Date: 2014-09-27 13:43:06+00:00\n"
+"PO-Revision-Date: 2014-09-27 15:44+0100\n"
 "Last-Translator: Jan-Paul Kleemans <jpkleemans@gmail.com>\n"
 "Language-Team: Jan-Paul Kleemans <jpkleemans@gmail.com>\n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.9\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: brute-force-login-protection.php:99 includes/settings-page.php:31
+#: brute-force-login-protection.php:99 includes/settings-page.php:35
 msgid "Brute Force Login Protection Settings"
 msgstr "Brute Force Login Protection Instellingen"
 
@@ -72,85 +72,94 @@ msgstr ""
 msgid "The Options have been successfully reset"
 msgstr "De opties zijn succesvol gereset"
 
-#: brute-force-login-protection.php:235
+#: brute-force-login-protection.php:238
 msgid "%d attempt remaining."
 msgid_plural "%d attempts remaining."
 msgstr[0] "%d resterende loginpoging."
 msgstr[1] "%d resterende loginpogingen."
 
-#: brute-force-login-protection.php:271
+#: brute-force-login-protection.php:274
 msgid "Allowed login attempts must be a number (between 1 and 100)"
 msgstr "Toegestane inlogpogingen moet een getal zijn (tussen 1 en 100)"
 
-#: brute-force-login-protection.php:287
+#: brute-force-login-protection.php:290
 msgid "Minutes before resetting must be a number (higher than 1)"
 msgstr ""
 "Minuten voordat loginpogingen teller wordt gereset moet een getal zijn "
 "(groter dan 1)"
 
-#: brute-force-login-protection.php:303
+#: brute-force-login-protection.php:306
 msgid "Failed login delay must be a number (between 1 and 10)"
 msgstr "Mislukte login vertraging moet een getal zijn (tussen 1 en 10)"
 
-#: brute-force-login-protection.php:321
+#: brute-force-login-protection.php:324
 msgid "An error occurred while saving the blocked users message"
 msgstr ""
 "Er is een fout opgetreden bij het opslaan van het geblokkeerde gebruikers "
 "bericht"
 
+#: brute-force-login-protection.php:497
+msgid "IP %s has been blocked"
+msgstr "IP %s geblokkeerd"
+
+#: brute-force-login-protection.php:498
+msgid "Brute Force Login Protection has blocked IP %s from access to %s on %s"
+msgstr ""
+"Brute Force Login Protection heeft IP %s geblokkeerd van toegang tot %s op %s"
+
 #: includes/settings-page.php:24
 msgid "Are you sure you want to reset all options?"
 msgstr "Weet u zeker dat u alle opties wilt resetten?"
 
-#: includes/settings-page.php:37
+#: includes/settings-page.php:41
 msgid "Status"
 msgstr "Status"
 
-#: includes/settings-page.php:39
+#: includes/settings-page.php:43
 msgid "You are not protected!"
 msgstr "U bent niet beschermd"
 
-#: includes/settings-page.php:41
+#: includes/settings-page.php:45
 msgid "You are protected!"
 msgstr "U bent beschermd"
 
-#: includes/settings-page.php:46
+#: includes/settings-page.php:50
 msgid ".htaccess file found"
 msgstr ".htaccess bestand gevonden"
 
-#: includes/settings-page.php:48
+#: includes/settings-page.php:52
 msgid ".htaccess file not found"
 msgstr ".htaccess bestand niet gevonden"
 
-#: includes/settings-page.php:52
+#: includes/settings-page.php:56
 msgid ".htaccess file readable"
 msgstr ".htaccess bestand leesbaar"
 
-#: includes/settings-page.php:54
+#: includes/settings-page.php:58
 msgid ".htaccess file not readable"
 msgstr ".htaccess niet leesbaar"
 
-#: includes/settings-page.php:58
+#: includes/settings-page.php:62
 msgid ".htaccess file writeable"
 msgstr ".htaccess bestand beschrijfbaar"
 
-#: includes/settings-page.php:60
+#: includes/settings-page.php:64
 msgid ".htaccess file not writeable"
 msgstr ".htaccess bestand niet beschrijfbaar"
 
-#: includes/settings-page.php:66
+#: includes/settings-page.php:70
 msgid "Options"
 msgstr "Opties"
 
-#: includes/settings-page.php:70
+#: includes/settings-page.php:74
 msgid "Allowed login attempts before blocking IP"
 msgstr "Toegestane inlogpogingen voordat IP wordt geblokkeerd"
 
-#: includes/settings-page.php:73
+#: includes/settings-page.php:77
 msgid "Minutes before resetting login attempts count"
 msgstr "Minuten voordat loginpogingen teller wordt gereset"
 
-#: includes/settings-page.php:76
+#: includes/settings-page.php:80
 msgid ""
 "Delay in seconds when a login attempt has failed (to slow down brute force "
 "attack)"
@@ -158,66 +167,74 @@ msgstr ""
 "Vertraging in seconden wanneer een loginpoging is mislukt (om brute force "
 "aanvallen te vertragen)"
 
-#: includes/settings-page.php:79
+#: includes/settings-page.php:83
 msgid "Inform user about remaining login attempts on login page"
 msgstr "Informeer de gebruiker over resterende loginpogingen op de loginpagina"
 
-#: includes/settings-page.php:82
+#: includes/settings-page.php:86
+msgid "Send email to administrator when an IP has been blocked"
+msgstr "Stuur e-mail naar beheerder wanneer een IP is geblokkeerd"
+
+#: includes/settings-page.php:89
 msgid "Message to show to blocked users (leave empty for default message)"
 msgstr ""
 "Bericht voor geblokkeerde gebruikers (laat leeg voor standaard bericht)"
 
-#: includes/settings-page.php:85
+#: includes/settings-page.php:92
 msgid ".htaccess file location"
 msgstr ".htaccess bestandslocatie"
 
-#: includes/settings-page.php:89
+#: includes/settings-page.php:96
 msgid "Save"
 msgstr "Opslaan"
 
-#: includes/settings-page.php:90
+#: includes/settings-page.php:97
 msgid "Reset"
 msgstr "Reset"
 
-#: includes/settings-page.php:96
+#: includes/settings-page.php:103
 msgid "Blocked IPs"
 msgstr "Geblokkeerde IPs"
 
-#: includes/settings-page.php:101 includes/settings-page.php:143
+#: includes/settings-page.php:108 includes/settings-page.php:150
 msgid "Address"
 msgstr "Adres"
 
-#: includes/settings-page.php:102 includes/settings-page.php:144
+#: includes/settings-page.php:109 includes/settings-page.php:151
 msgid "Actions"
 msgstr "Acties"
 
-#: includes/settings-page.php:116
+#: includes/settings-page.php:123
 msgid "Unblock"
 msgstr "Deblokkeren"
 
-#: includes/settings-page.php:128
+#: includes/settings-page.php:135
 msgid "IP to block"
 msgstr "Te blokkeren IP"
 
-#: includes/settings-page.php:131
+#: includes/settings-page.php:138
 msgid "Manually block IP"
 msgstr "Handmatig IP blokkeren"
 
-#: includes/settings-page.php:138
+#: includes/settings-page.php:145
 msgid "Whitelisted IPs"
 msgstr "Whitelist (Toegestane IPs)"
 
-#: includes/settings-page.php:158
+#: includes/settings-page.php:168
 msgid "Remove from whitelist"
 msgstr "Verwijder van whitelist"
 
-#: includes/settings-page.php:170
+#: includes/settings-page.php:180
 msgid "IP to whitelist"
 msgstr "Toe te voegen IP"
 
-#: includes/settings-page.php:173
+#: includes/settings-page.php:183
 msgid "Add to whitelist"
 msgstr "Voeg toe aan whitelist"
+
+#: includes/settings-page.php:185
+msgid "Whitelist my current IP (%s)"
+msgstr "Whitelist mijn huidige IP (%s)"
 
 #. Plugin Name of the plugin/theme
 msgid "Brute Force Login Protection"
