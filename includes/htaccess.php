@@ -27,8 +27,8 @@ class Htaccess {
      */
     public function checkRequirements() {
         $status = array(
-            'found' => false,
-            'readable' => false,
+            'found'     => false,
+            'readable'  => false,
             'writeable' => false
         );
 

@@ -2,18 +2,19 @@
 Contributors: Jan-Paul Kleemans
 Tags: brute force, bruteforce, login, wp-login, protection, shield, security, htaccess, block, ip
 Requires at least: 2.7.0
-Tested up to: 4.0
+Tested up to: 4.1
 Stable tag: 1.4.1
 License: GPL2
 
 Protects your website against brute force login attacks using .htaccess
 
 == Description ==
-A Brute Force Attack aims at being the simplest kind of method to gain access to a site: it tries usernames and passwords, over and over again, until it gets in. Brute Force Login Protection protects your website against brute force login attacks using .htaccess.
+A Brute Force Attack aims at being the simplest kind of method to gain access to a site: it tries usernames and passwords, over and over again, until it gets in.
+Brute Force Login Protection is a lightweight plugin that protects your website against brute force login attacks using .htaccess.
 
 After a specified limit of login attempts within a specified time, the IP address of the hacker will be blocked.
 
-Features
+= Features =
 
 * Limit the number of allowed login attempts using normal login form
 * Limit the number of allowed login attempts using Auth Cookies
@@ -24,7 +25,10 @@ Features
 * Option to email administrator when an IP has been blocked
 * Custom message to show to blocked users
 
-Your feedback is highly appreciated!
+= Contribute =
+If you'd like to make a contribution to the Brute Force Login Protection plugin, you can submit a pull request to our <a href="https://github.com/jpkleemans/Brute-Force-Login-Protection/">GitHub Repository</a>.
+You can also create a thread in our <a href="https://wordpress.org/support/plugin/brute-force-login-protection/">Support Forum</a>.
+**Your feedback is highly appreciated!**
 
 == Installation ==
 1. Install the plugin either via the WordPress.org plugin directory, or by uploading the files to your wp-content/plugin directory.
@@ -44,6 +48,9 @@ Brute Force Login Protection will only work if your .htaccess file is writeable 
 1. Plugin settings page
 
 == Changelog ==
+= 1.5 =
+* Improved stability
+
 = 1.4.1 =
 * Option to email administrator when an IP has been blocked
 * Button to whitelist your current IP
