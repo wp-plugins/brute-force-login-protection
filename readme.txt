@@ -48,6 +48,9 @@ Brute Force Login Protection will only work if your .htaccess file is writeable 
 1. Plugin settings page
 
 == Changelog ==
+= 1.5.2 =
+* Bugfix
+
 = 1.5.1 =
 * Security fix
 
